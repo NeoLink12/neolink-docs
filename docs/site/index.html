@@ -3,129 +3,335 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Neo Link Integration</title>
+  <title>Neo Link: инструкция по интеграции</title>
   <style>
     :root {
-      --bg: #0b1220;
-      --panel: #132033;
-      --panel-2: #1c2b40;
-      --text: #f4f7fb;
-      --muted: #9eb0c7;
-      --accent: #45a3ff;
-      --line: #27405f;
+      --bg: #0a1220;
+      --panel: rgba(20, 32, 52, 0.96);
+      --line: #24425f;
+      --text: #f5f7fb;
+      --muted: #a8bad0;
+      --accent: #49a4ff;
+      --accent-soft: #112a46;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: "Segoe UI", system-ui, sans-serif;
-      background: linear-gradient(180deg, #08111d 0%, #0d1827 100%);
       color: var(--text);
-      line-height: 1.6;
+      background:
+        radial-gradient(circle at top left, rgba(44,116,201,.18), transparent 30%),
+        radial-gradient(circle at top right, rgba(39,87,153,.15), transparent 30%),
+        linear-gradient(180deg, #08111d 0%, #0d1727 100%);
+      line-height: 1.65;
     }
     .wrap {
-      max-width: 920px;
+      max-width: 980px;
       margin: 0 auto;
-      padding: 32px 20px 60px;
+      padding: 28px 18px 80px;
     }
     .hero, .card {
-      background: rgba(19, 32, 51, 0.95);
+      background: var(--panel);
       border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      border-radius: 22px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.24);
     }
-    .hero { margin-bottom: 20px; }
-    .card { margin-top: 18px; }
-    h1, h2 { margin: 0 0 12px; }
-    p, li { color: var(--muted); }
-    code, pre {
-      font-family: Consolas, monospace;
-      background: #0b1627;
-      border: 1px solid #223754;
-      border-radius: 12px;
+    .hero {
+      padding: 28px;
+      margin-bottom: 20px;
     }
-    code { padding: 2px 6px; color: #fff; }
-    pre { padding: 14px; overflow: auto; }
-    a { color: var(--accent); text-decoration: none; }
-    .pill {
+    .hero h1 {
+      font-size: 42px;
+      line-height: 1.1;
+      margin: 0 0 16px;
+    }
+    .hero p {
+      color: var(--muted);
+      margin: 0 0 18px;
+      font-size: 18px;
+    }
+    .badge {
       display: inline-block;
-      padding: 6px 10px;
+      margin: 0 8px 8px 0;
+      padding: 8px 12px;
       border-radius: 999px;
-      background: #102840;
-      border: 1px solid #234d79;
-      color: #dbeafe;
+      border: 1px solid #2e5b87;
+      background: var(--accent-soft);
+      color: #eaf4ff;
       font-size: 14px;
-      margin-right: 8px;
-      margin-bottom: 8px;
+    }
+    .card {
+      padding: 24px;
+      margin-top: 18px;
+    }
+    h2 {
+      margin: 0 0 14px;
+      font-size: 30px;
+      line-height: 1.2;
+    }
+    h3 {
+      margin: 24px 0 10px;
+      font-size: 22px;
+    }
+    p, li {
+      color: var(--muted);
+      font-size: 17px;
+    }
+    ul, ol {
+      padding-left: 24px;
+      margin: 10px 0 0;
+    }
+    code {
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: #0c1a2b;
+      border: 1px solid #27405e;
+      color: #fff;
+      font-family: Consolas, monospace;
+      font-size: 15px;
+    }
+    pre {
+      margin: 14px 0 0;
+      padding: 16px;
+      overflow: auto;
+      border-radius: 16px;
+      border: 1px solid #284361;
+      background: #091423;
+      color: #eaf2fb;
+      font-family: Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .info {
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid #2f577f;
+      background: #0f2137;
+      color: #dce9f8;
+      margin-top: 14px;
+    }
+    .grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <section class="hero">
-      <h1>Neo Link: интеграция продажи трафика</h1>
-      <p>Готовая документация для владельцев Telegram-ботов и разработчиков интеграции.</p>
-      <div>
-        <span class="pill">Подключение по токену</span>
-        <span class="pill">API key</span>
-        <span class="pill">aiogram</span>
-        <span class="pill">Проверка подписок</span>
-        <span class="pill">Списания за отписки</span>
+      <h1>Neo Link: полная инструкция по интеграции продажи трафика</h1>
+      <p>Нормальная рабочая документация: что подключать, куда вставлять код, как проверять подписки, как начислять доход и что нужно сделать, чтобы всё реально заработало.</p>
+      <span class="badge">Подключение по токену</span>
+      <span class="badge">API key</span>
+      <span class="badge">aiogram</span>
+      <span class="badge">getChatMember</span>
+      <span class="badge">Автосписания</span>
+      <span class="badge">Модерация</span>
+    </section>
+
+    <section class="card">
+      <h2>1. Что делает Neo Link</h2>
+      <p>Neo Link подключает ваш Telegram-бот к системе продажи трафика. Вы добавляете бота по токену, получаете API-ключ, проходите модерацию, а затем встраиваете в своего бота логику работы со спонсорами.</p>
+      <div class="info">
+        Цена для клиента сервиса:
+        <br>• с проверкой: <b>2.5 ₽</b>
+        <br>• без проверки: <b>1.5 ₽</b>
+        <br><br>
+        Доход владельца подключённого бота:
+        <br>• <b>1 ₽ за подтверждённую подписку</b>
       </div>
     </section>
 
     <section class="card">
-      <h2>1. Как подключить бота</h2>
+      <h2>2. Как подключить бота</h2>
       <ol>
         <li>Откройте раздел <b>Продажа трафика</b>.</li>
         <li>Нажмите <b>Добавить нового бота</b>.</li>
-        <li>Отправьте токен бота.</li>
-        <li>Получите API key.</li>
-        <li>Дождитесь модерации.</li>
+        <li>Отправьте токен Telegram-бота.</li>
+        <li>Neo Link проверит токен через <code>getMe</code>.</li>
+        <li>После проверки вы получите <b>API key</b>.</li>
+        <li>Заявка уйдёт на модерацию.</li>
+      </ol>
+      <h3>Статусы бота</h3>
+      <ul>
+        <li><b>🟡 На модерации</b> — бот ещё не допущен к работе.</li>
+        <li><b>🟢 Допущено</b> — бот одобрен и может работать.</li>
+        <li><b>🔴 Отклонено</b> — бот отклонён модерацией.</li>
+        <li><b>⏸ Остановлен</b> — бот выключен владельцем и временно не участвует в логике API.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>3. Как устроен поток работы</h2>
+      <ol>
+        <li>Пользователь запускает ваш внешний бот.</li>
+        <li>Ваш бот получает список спонсоров от Neo Link.</li>
+        <li>Пользователь подписывается на каналы.</li>
+        <li>Ваш бот проверяет подписки через <code>getChatMember</code>.</li>
+        <li>Если подписка подтверждена, бот сообщает Neo Link о событии.</li>
+        <li>Neo Link фиксирует подписку и учитывает доход владельца.</li>
+        <li>Фоновый аудит периодически проверяет, не отписался ли пользователь.</li>
+        <li>Если пользователь отписался, система делает списание автоматически.</li>
       </ol>
     </section>
 
     <section class="card">
-      <h2>2. Как работает логика оплаты</h2>
-      <p>Покупатель трафика оплачивает продвижение по прайсу сервиса:</p>
-      <ul>
-        <li>с проверкой: <b>2.5 ₽</b></li>
-        <li>без проверки: <b>1.5 ₽</b></li>
-      </ul>
-      <p>Доход владельца подключённого бота фиксируется отдельно: <b>1 ₽ за подтверждённую подписку</b>.</p>
+      <h2>4. Что уже реализовано в текущем проекте</h2>
+      <div class="grid">
+        <div>
+          <h3>Внутри Neo Link уже есть</h3>
+          <ul>
+            <li>подключение по токену</li>
+            <li>генерация API-ключа</li>
+            <li>модерация</li>
+            <li>включение и остановка бота</li>
+            <li>учёт подписок</li>
+            <li>автосписания при отписке</li>
+            <li>финансовые экраны</li>
+            <li>админская команда <code>/list</code></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Что нужно сделать снаружи</h3>
+          <ul>
+            <li>развернуть публичный HTTP API</li>
+            <li>встроить вызовы API в ваш внешний бот</li>
+            <li>проверять подписки через Telegram Bot API</li>
+            <li>регистрировать подтверждённые подписки</li>
+            <li>обрабатывать ошибки и таймауты</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <section class="card">
-      <h2>3. Что должен делать ваш бот</h2>
+      <h2>5. Какой HTTP API нужен для реальной интеграции</h2>
+      <p>Чтобы внешний бот подключался к Neo Link через интернет, нужно открыть публичные web endpoints. Ниже рекомендуемый контракт.</p>
+
+      <h3>Получить спонсоров</h3>
+      <pre>POST /api/neolink/get-sponsors
+
+{
+  "api_key": "YOUR_API_KEY",
+  "user_id": 123456789
+}</pre>
+
+      <h3>Проверить подписку</h3>
+      <pre>POST /api/neolink/check-member
+
+{
+  "api_key": "YOUR_API_KEY",
+  "user_id": 123456789,
+  "sponsor_chat_id": "-1001234567890"
+}</pre>
+
+      <h3>Зарегистрировать подтверждённую подписку</h3>
+      <pre>POST /api/neolink/register-subscription
+
+{
+  "api_key": "YOUR_API_KEY",
+  "user_id": 123456789,
+  "sponsor_chat_id": "-1001234567890",
+  "sponsor_name": "Sponsor channel",
+  "charge_amount": 1
+}</pre>
+    </section>
+
+    <section class="card">
+      <h2>6. Что должен делать ваш aiogram-бот</h2>
       <ul>
         <li>получать список спонсоров</li>
-        <li>проверять подписку через <code>getChatMember</code></li>
-        <li>сообщать Neo Link о подтверждённой подписке</li>
-        <li>обрабатывать сетевые ошибки и таймауты</li>
+        <li>показывать их пользователю</li>
+        <li>после подписки проверять статус через <code>getChatMember</code></li>
+        <li>если статус <code>member</code>, <code>administrator</code> или <code>creator</code> — подтверждать подписку</li>
+        <li>отправлять подтверждённую подписку в Neo Link</li>
       </ul>
-    </section>
 
-    <section class="card">
-      <h2>4. Пример aiogram</h2>
-      <pre><code>async def call_neolink(endpoint: str, payload: dict):
+      <h3>Минимальный пример aiogram</h3>
+      <pre>import aiohttp
+from aiogram import Bot, Dispatcher, F
+from aiogram.filters import CommandStart
+from aiogram.types import Message
+
+BOT_TOKEN = "YOUR_BOT_TOKEN"
+NEOLINK_API_KEY = "YOUR_NEO_LINK_API_KEY"
+NEOLINK_BASE_URL = "https://your-domain.com/api/neolink"
+
+
+async def neolink_request(endpoint: str, payload: dict):
     body = {"api_key": NEOLINK_API_KEY, **payload}
     async with aiohttp.ClientSession() as session:
         async with session.post(f"{NEOLINK_BASE_URL}/{endpoint}", json=body, timeout=10) as resp:
             resp.raise_for_status()
-            return await resp.json()</code></pre>
-      <p>Полный пример находится в <code>docs/neolink_aiogram_example.py</code>.</p>
+            return await resp.json()</pre>
+
+      <div class="info">
+        Полный пример лежит в файле <code>docs/neolink_aiogram_example.py</code>.
+      </div>
     </section>
 
     <section class="card">
-      <h2>5. Публикация</h2>
-      <p>Этот файл готов для публикации на любом статическом хостинге:</p>
+      <h2>7. Как правильно проверять подписку</h2>
+      <p>Проверяйте пользователя только через Telegram Bot API, используя <code>getChatMember</code>.</p>
+      <p>Успешными считаются только статусы:</p>
       <ul>
-        <li>GitHub Pages</li>
-        <li>Vercel</li>
-        <li>Netlify</li>
-        <li>ваш собственный сайт</li>
+        <li><code>member</code></li>
+        <li><code>administrator</code></li>
+        <li><code>creator</code></li>
       </ul>
-      <p>Файл: <code>docs/site/index.html</code></p>
+      <p>Если пришёл статус <code>left</code>, <code>kicked</code> или Telegram API вернул ошибку, подписку подтверждать нельзя.</p>
+    </section>
+
+    <section class="card">
+      <h2>8. Как работает автоматическое списание</h2>
+      <p>Внутри проекта есть фоновая задача, которая периодически проверяет активные подписки. Если пользователь уже не состоит в спонсоре, Neo Link:</p>
+      <ul>
+        <li>помечает подписку как отписанную</li>
+        <li>делает списание</li>
+        <li>создаёт финансовую запись</li>
+        <li>сохраняет событие в лог</li>
+      </ul>
+      <div class="info">
+        Если бот остановлен владельцем, проверки и учёт по нему временно не выполняются до повторного включения.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>9. Частые ошибки и что делать</h2>
+      <h3>Невалидный токен</h3>
+      <p>Проверьте токен у BotFather и обновите его в настройках бота.</p>
+
+      <h3>Бот не может проверить подписку</h3>
+      <p>Обычно причина в том, что бот не добавлен администратором в канал или у него нет нужных прав.</p>
+
+      <h3>Таймаут, DNS или ошибка сети</h3>
+      <p>Не считайте такую проверку успешной. Повторите запрос позже и сохраните ошибку в лог.</p>
+
+      <h3>Одна и та же подписка подтверждается повторно</h3>
+      <p>Используйте уникальную связку <code>traffic_bot_id + user_id + sponsor_chat_id</code>. В текущем проекте это уже предусмотрено.</p>
+    </section>
+
+    <section class="card">
+      <h2>10. Что нужно сделать, чтобы всё заработало end-to-end</h2>
+      <ol>
+        <li>Подключить бота в Neo Link и получить API-ключ.</li>
+        <li>Развернуть публичный HTTP API Neo Link.</li>
+        <li>Добавить вызовы этого API в своего aiogram-бота.</li>
+        <li>Проверить руками сценарии:
+          <ul>
+            <li>подписался</li>
+            <li>не подписался</li>
+            <li>отписался</li>
+            <li>бот остановлен</li>
+            <li>бот включён снова</li>
+          </ul>
+        </li>
+      </ol>
     </section>
   </div>
 </body>
