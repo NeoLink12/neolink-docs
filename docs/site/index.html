@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neo Link Integration</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #132033;
+      --panel-2: #1c2b40;
+      --text: #f4f7fb;
+      --muted: #9eb0c7;
+      --accent: #45a3ff;
+      --line: #27405f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: linear-gradient(180deg, #08111d 0%, #0d1827 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+    .hero, .card {
+      background: rgba(19, 32, 51, 0.95);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .hero { margin-bottom: 20px; }
+    .card { margin-top: 18px; }
+    h1, h2 { margin: 0 0 12px; }
+    p, li { color: var(--muted); }
+    code, pre {
+      font-family: Consolas, monospace;
+      background: #0b1627;
+      border: 1px solid #223754;
+      border-radius: 12px;
+    }
+    code { padding: 2px 6px; color: #fff; }
+    pre { padding: 14px; overflow: auto; }
+    a { color: var(--accent); text-decoration: none; }
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #102840;
+      border: 1px solid #234d79;
+      color: #dbeafe;
+      font-size: 14px;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Neo Link: интеграция продажи трафика</h1>
+      <p>Готовая документация для владельцев Telegram-ботов и разработчиков интеграции.</p>
+      <div>
+        <span class="pill">Подключение по токену</span>
+        <span class="pill">API key</span>
+        <span class="pill">aiogram</span>
+        <span class="pill">Проверка подписок</span>
+        <span class="pill">Списания за отписки</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>1. Как подключить бота</h2>
+      <ol>
+        <li>Откройте раздел <b>Продажа трафика</b>.</li>
+        <li>Нажмите <b>Добавить нового бота</b>.</li>
+        <li>Отправьте токен бота.</li>
+        <li>Получите API key.</li>
+        <li>Дождитесь модерации.</li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2>2. Как работает логика оплаты</h2>
+      <p>Покупатель трафика оплачивает продвижение по прайсу сервиса:</p>
+      <ul>
+        <li>с проверкой: <b>2.5 ₽</b></li>
+        <li>без проверки: <b>1.5 ₽</b></li>
+      </ul>
+      <p>Доход владельца подключённого бота фиксируется отдельно: <b>1 ₽ за подтверждённую подписку</b>.</p>
+    </section>
+
+    <section class="card">
+      <h2>3. Что должен делать ваш бот</h2>
+      <ul>
+        <li>получать список спонсоров</li>
+        <li>проверять подписку через <code>getChatMember</code></li>
+        <li>сообщать Neo Link о подтверждённой подписке</li>
+        <li>обрабатывать сетевые ошибки и таймауты</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>4. Пример aiogram</h2>
+      <pre><code>async def call_neolink(endpoint: str, payload: dict):
+    body = {"api_key": NEOLINK_API_KEY, **payload}
+    async with aiohttp.ClientSession() as session:
+        async with session.post(f"{NEOLINK_BASE_URL}/{endpoint}", json=body, timeout=10) as resp:
+            resp.raise_for_status()
+            return await resp.json()</code></pre>
+      <p>Полный пример находится в <code>docs/neolink_aiogram_example.py</code>.</p>
+    </section>
+
+    <section class="card">
+      <h2>5. Публикация</h2>
+      <p>Этот файл готов для публикации на любом статическом хостинге:</p>
+      <ul>
+        <li>GitHub Pages</li>
+        <li>Vercel</li>
+        <li>Netlify</li>
+        <li>ваш собственный сайт</li>
+      </ul>
+      <p>Файл: <code>docs/site/index.html</code></p>
+    </section>
+  </div>
+</body>
+</html>
