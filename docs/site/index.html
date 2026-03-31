@@ -6,41 +6,41 @@
   <title>Neo Link: интеграция в Telegram-бот</title>
   <style>
     :root {
-      --bg: #07101a;
-      --panel: #122235;
-      --line: #284660;
-      --text: #f3f7fc;
-      --muted: #bfd0e2;
-      --accent: #4aa7ff;
-      --soft: #0d1b2b;
+      --bg: #08111b;
+      --panel: #122131;
+      --panel-2: #0d1825;
+      --line: #294760;
+      --text: #eef5fc;
+      --muted: #bdd0e1;
+      --accent: #4da8ff;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background:
-        radial-gradient(circle at top left, rgba(74,167,255,.15), transparent 28%),
-        linear-gradient(180deg, #07101a 0%, #0b1624 100%);
       color: var(--text);
       font-family: "Segoe UI", system-ui, sans-serif;
       line-height: 1.6;
+      background:
+        radial-gradient(circle at top left, rgba(77,168,255,.14), transparent 25%),
+        linear-gradient(180deg, #08111b 0%, #0d1724 100%);
     }
     .wrap {
-      max-width: 980px;
+      max-width: 1040px;
       margin: 0 auto;
-      padding: 28px 18px 80px;
+      padding: 28px 18px 72px;
     }
     .hero, .card {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 22px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.22);
+      box-shadow: 0 16px 42px rgba(0,0,0,.22);
     }
     .hero {
       padding: 28px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .hero h1 {
-      margin: 0 0 12px;
+      margin: 0 0 10px;
       font-size: 40px;
       line-height: 1.1;
     }
@@ -50,37 +50,38 @@
       font-size: 18px;
     }
     .card {
-      padding: 24px;
       margin-top: 18px;
+      padding: 22px;
     }
     h2 {
       margin: 0 0 12px;
-      font-size: 30px;
+      font-size: 28px;
     }
     p, li {
-      color: var(--muted);
       font-size: 17px;
+      color: var(--muted);
     }
     ul, ol {
       margin: 12px 0 0;
       padding-left: 24px;
     }
     pre {
+      overflow: auto;
       margin: 14px 0 0;
       padding: 16px;
-      overflow: auto;
       border-radius: 16px;
-      border: 1px solid #2f506d;
-      background: #091321;
-      color: #eaf2fb;
+      border: 1px solid #30516d;
+      background: #09131f;
+      color: #eff6fd;
       font-size: 14px;
       line-height: 1.5;
+      white-space: pre-wrap;
     }
     code {
       padding: 2px 7px;
       border-radius: 10px;
-      border: 1px solid #2d4f72;
-      background: #0b1828;
+      border: 1px solid #31516f;
+      background: var(--panel-2);
       color: #fff;
       font-family: Consolas, monospace;
     }
@@ -88,9 +89,9 @@
       margin-top: 14px;
       padding: 14px 16px;
       border-radius: 16px;
-      background: var(--soft);
-      border: 1px solid #325572;
-      color: #e5eef9;
+      border: 1px solid #355a79;
+      background: var(--panel-2);
+      color: #e4eef9;
     }
   </style>
 </head>
@@ -98,30 +99,34 @@
   <div class="wrap">
     <section class="hero">
       <h1>Neo Link: как подключить интеграцию в свой Telegram-бот</h1>
-      <p>Готовый практический шаблон: как получить API key, как показать блок спонсоров и как скрывать уже выполненные подписки.</p>
+      <p>Короткая рабочая инструкция для разработчика: что получить в Neo Link, какие методы вызывать и как встроить блок спонсоров в собственного бота.</p>
     </section>
 
     <section class="card">
       <h2>1. Что получить в Neo Link</h2>
       <ol>
-        <li>Откройте <b>Продажа трафика</b>.</li>
-        <li>Нажмите <b>Добавить нового бота</b>.</li>
-        <li>Отправьте токен вашего бота.</li>
-        <li>Получите <b>API key</b>.</li>
+        <li>Откройте <code>Продажа трафика</code>.</li>
+        <li>Нажмите <code>Добавить нового бота</code>.</li>
+        <li>Отправьте токен вашего Telegram-бота.</li>
+        <li>Получите <code>API key</code>.</li>
         <li>Дождитесь модерации.</li>
       </ol>
       <pre>BOT_TOKEN = "YOUR_BOT_TOKEN"
 NEOLINK_API_KEY = "YOUR_NEO_LINK_API_KEY"
 NEOLINK_BASE_URL = "http://127.0.0.1:8080/api/neolink"</pre>
-      <div class="note">Если Neo Link API запущен локально через <code>main.py</code>, используйте <code>http://127.0.0.1:8080/api/neolink</code>. На проде замените адрес на свой домен, например <code>https://your-domain.com/api/neolink</code>.</div>
+      <div class="note">
+        <code>127.0.0.1</code> подходит только если Neo Link API и ваш бот работают на одной и той же машине.
+        Если бот крутится на другом сервере, используйте реальный адрес API, например
+        <code>https://your-domain.com/api/neolink</code>.
+      </div>
     </section>
 
     <section class="card">
-      <h2>2. HTTP-клиент</h2>
+      <h2>2. Базовый HTTP-клиент</h2>
       <pre>import aiohttp
 
 
-async def neolink_request(endpoint: str, payload: dict):
+async def neolink_request(endpoint: str, payload: dict) -&gt; dict:
     body = {"api_key": NEOLINK_API_KEY, **payload}
     async with aiohttp.ClientSession() as session:
         async with session.post(
@@ -129,8 +134,10 @@ async def neolink_request(endpoint: str, payload: dict):
             json=body,
             timeout=15,
         ) as resp:
-            resp.raise_for_status()
-            return await resp.json()</pre>
+            data = await resp.json(content_type=None)
+            if resp.status &gt;= 400:
+                raise RuntimeError(data.get("error") or f"http_{resp.status}")
+            return data</pre>
     </section>
 
     <section class="card">
@@ -138,26 +145,66 @@ async def neolink_request(endpoint: str, payload: dict):
       <pre>POST /api/neolink/get-sponsors
 POST /api/neolink/check-member
 POST /api/neolink/register-subscription</pre>
-      <div class="note">Сначала ваш бот получает спонсоров, потом скрывает уже подписанные каналы, и только после этого показывает блок кнопок пользователю.</div>
+      <pre>{
+  "api_key": "YOUR_API_KEY",
+  "user_id": 123456789
+}</pre>
+      <pre>{
+  "api_key": "YOUR_API_KEY",
+  "user_id": 123456789,
+  "sponsor_chat_id": "-1001234567890"
+}</pre>
+      <pre>{
+  "api_key": "YOUR_API_KEY",
+  "user_id": 123456789,
+  "order_id": 55,
+  "sponsor_chat_id": "-1001234567890",
+  "sponsor_name": "Sponsor #55",
+  "charge_amount": 1
+}</pre>
+      <div class="note">
+        Подписка считается подтверждённой только если <code>status</code> равен
+        <code>member</code>, <code>administrator</code> или <code>creator</code>.
+      </div>
     </section>
 
     <section class="card">
-      <h2>4. Главное правило показа</h2>
-      <p>Если пользователь уже подписан на канал, этот спонсор не должен показываться в блоке.</p>
+      <h2>4. Правильная логика показа</h2>
       <ol>
-        <li>Запросили <code>get-sponsors</code></li>
-        <li>Для каждого sponsor с проверкой вызвали <code>check-member</code></li>
-        <li>Если <code>subscribed = true</code>, этот sponsor скрывается</li>
-        <li>Показываются только невыполненные задания</li>
+        <li>Бот вызывает <code>get-sponsors</code>.</li>
+        <li>Для каждого спонсора с <code>requires_check = true</code> вызывает <code>check-member</code>.</li>
+        <li>Если <code>subscribed = true</code>, спонсор скрывается.</li>
+        <li>Показываются только невыполненные спонсоры.</li>
       </ol>
     </section>
 
     <section class="card">
-      <h2>5. Готовый блок как на кнопках</h2>
-      <pre>from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+      <h2>5. Готовый пример для aiogram</h2>
+      <pre>import aiohttp
+
+from aiogram import F, Router
+from aiogram.fsm.context import FSMContext
+from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 
-async def load_visible_sponsors(user_id: int):
+router = Router()
+
+
+async def neolink_request(endpoint: str, payload: dict) -&gt; dict:
+    body = {"api_key": NEOLINK_API_KEY, **payload}
+    async with aiohttp.ClientSession() as session:
+        async with session.post(
+            f"{NEOLINK_BASE_URL}/{endpoint}",
+            json=body,
+            timeout=15,
+        ) as resp:
+            data = await resp.json(content_type=None)
+            if resp.status &gt;= 400:
+                raise RuntimeError(data.get("error") or f"http_{resp.status}")
+            return data
+
+
+async def load_visible_sponsors(user_id: int) -&gt; list[dict]:
     response = await neolink_request("get-sponsors", {"user_id": user_id})
     sponsors = response.get("sponsors", [])
 
@@ -178,7 +225,7 @@ async def load_visible_sponsors(user_id: int):
     return visible
 
 
-def build_sponsor_keyboard(sponsors: list[dict]) -> InlineKeyboardMarkup:
+def build_sponsor_keyboard(sponsors: list[dict]) -&gt; InlineKeyboardMarkup:
     rows = []
     current_row = []
 
@@ -197,21 +244,41 @@ def build_sponsor_keyboard(sponsors: list[dict]) -> InlineKeyboardMarkup:
         rows.append(current_row)
 
     rows.append([InlineKeyboardButton(text="✅ Я подписан", callback_data="check_sponsors")])
-    return InlineKeyboardMarkup(inline_keyboard=rows)</pre>
-      <pre>text = (
-    "Чтобы продолжить пользоваться ботом, пожалуйста,\n"
-    "подпишись на следующие ресурсы! 🤠"
-)</pre>
-    </section>
+    return InlineKeyboardMarkup(inline_keyboard=rows)
 
-    <section class="card">
-      <h2>6. Готовая проверка по кнопке</h2>
-      <pre>@router.callback_query(F.data == "check_sponsors")
+
+async def show_sponsors(message: Message, state: FSMContext) -&gt; None:
+    try:
+        visible = await load_visible_sponsors(message.from_user.id)
+    except Exception:
+        await message.answer("Neo Link временно недоступен. Попробуйте позже.")
+        return
+
+    await state.update_data(visible_sponsors=visible)
+
+    if not visible:
+        await message.answer("Сейчас активных спонсоров для показа нет.")
+        return
+
+    text = (
+        "Чтобы продолжить пользоваться ботом, пожалуйста,\n"
+        "подпишись на следующие ресурсы."
+    )
+    await message.answer(text, reply_markup=build_sponsor_keyboard(visible))
+
+
+@router.callback_query(F.data == "check_sponsors")
 async def check_sponsors(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     sponsors = data.get("visible_sponsors", [])
 
+    if not sponsors:
+        await callback.answer("Список спонсоров пуст. Обновите экран.", show_alert=True)
+        return
+
     not_completed = 0
+    credited_count = 0
+    duplicate_count = 0
 
     for sponsor in sponsors:
         if sponsor.get("requires_check"):
@@ -226,7 +293,7 @@ async def check_sponsors(callback: CallbackQuery, state: FSMContext):
                 not_completed += 1
                 continue
 
-        await neolink_request(
+        register_result = await neolink_request(
             "register-subscription",
             {
                 "user_id": callback.from_user.id,
@@ -237,6 +304,11 @@ async def check_sponsors(callback: CallbackQuery, state: FSMContext):
             },
         )
 
+        if register_result.get("credited"):
+            credited_count += 1
+        elif register_result.get("duplicate"):
+            duplicate_count += 1
+
     if not_completed:
         await callback.answer(
             f"Не все подписки выполнены. Осталось: {not_completed}",
@@ -244,17 +316,51 @@ async def check_sponsors(callback: CallbackQuery, state: FSMContext):
         )
         return
 
-    await callback.answer("Подписки подтверждены.", show_alert=True)</pre>
+    if credited_count:
+        await callback.answer(
+            f"Подписки подтверждены. Начислено: {credited_count}.",
+            show_alert=True,
+        )
+        return
+
+    if duplicate_count:
+        await callback.answer(
+            "Подписка уже была подтверждена ранее.",
+            show_alert=True,
+        )
+        return
+
+    await callback.answer("Новых начислений нет.", show_alert=True)</pre>
     </section>
 
     <section class="card">
-      <h2>7. Что проверить перед запуском</h2>
+      <h2>6. Что обязательно обработать</h2>
+      <ul>
+        <li>Неверный <code>API key</code>.</li>
+        <li>Таймаут запроса.</li>
+        <li>Недоступность Neo Link API.</li>
+        <li>Ситуацию, когда пользователь нажал <code>Я подписан</code>, но реально не подписался.</li>
+        <li>Ответ <code>duplicate</code> от <code>register-subscription</code>.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>7. Повторная подписка после отписки</h2>
+      <p>Если пользователь уже был засчитан, потом отписался, с владельца произошло списание, а затем этот же пользователь снова подписался, повторное начисление возможно снова.</p>
+      <div class="note">
+        При этом <code>done</code> у заказа второй раз не растёт, потому что это не новый уникальный подписчик, а возврат старого.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>8. Что проверить перед запуском</h2>
       <ol>
-        <li>Бот получает спонсоров из Neo Link.</li>
+        <li>Бот получает список спонсоров.</li>
         <li>Уже подписанные каналы не показываются.</li>
-        <li>Кнопки <code>Спонсор №...</code> открывают нужные ссылки.</li>
-        <li>Кнопка <code>✅ Я подписан</code> реально делает проверку подписки.</li>
-        <li>После подтверждения бот продолжает работу.</li>
+        <li>Кнопки <code>Спонсор №...</code> открывают правильные ссылки.</li>
+        <li>Кнопка <code>✅ Я подписан</code> действительно проверяет подписку.</li>
+        <li>При <code>duplicate</code> бот не считает это сетевой ошибкой.</li>
+        <li>Если бот и API работают на разных машинах, используется не <code>127.0.0.1</code>, а реальный адрес API.</li>
       </ol>
     </section>
   </div>
