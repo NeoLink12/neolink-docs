@@ -23,6 +23,18 @@
 ```python
 BOT_TOKEN = "YOUR_BOT_TOKEN"
 NEOLINK_API_KEY = "YOUR_NEO_LINK_API_KEY"
+NEOLINK_BASE_URL = "http://127.0.0.1:8080/api/neolink"
+```
+
+Локально при запущенном [main.py](C:\Users\Admin\Documents\neos\main.py) адрес Neo Link API такой:
+
+```python
+NEOLINK_BASE_URL = "http://127.0.0.1:8080/api/neolink"
+```
+
+Если потом вынесете API на сервер, тогда заменяете его на свой домен:
+
+```python
 NEOLINK_BASE_URL = "https://your-domain.com/api/neolink"
 ```
 
