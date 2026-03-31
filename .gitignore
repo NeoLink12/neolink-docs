@@ -1,0 +1,5 @@
+__pycache__/
+docs/__pycache__/
+*.db
+*.py
+!docs/neolink_aiogram_example.py
